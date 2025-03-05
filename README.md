@@ -142,6 +142,7 @@ class TaskItem extends Component {
 
 ## Review Points
 
+### Application State Management
 #### It stores and updates application state between sessions.
 
 <details>
@@ -251,6 +252,7 @@ const completedButton = createElement('button', {
 ```
 </details>
 
+### URL and Navigation
 #### It can control the URL.
 
 <details>
@@ -272,8 +274,8 @@ const completedButton = createElement('button', {
 ```
 </details>
 
-#### Elements can be created.
-#### Elements can be nested in other elements.
+### Element and Component Management
+#### Elements can be created & Elements can be nested in other elements.
 
 <details>
 <summary>Example from the project</summary>
@@ -346,6 +348,7 @@ export default TaskList; // Export for reuse elsewhere
 ```
 </details>
 
+### Event Handling
 #### It handles user input, and form submissions.
 
 <details>
