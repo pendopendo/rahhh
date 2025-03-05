@@ -55,39 +55,147 @@ The app is structured as follows:
 
 ## Code Breakdown
 
-### Event Handling
-Event delegation ensures efficient event management.
+### Component.js
+Base class for reusable UI components with lifecycle methods for rendering, mounting, updating, and unmounting.
 
 <details>
 <summary>Example</summary>
 
 ```js
-const delegator = new EventDelegator(document.body);
-delegator.on('click', '.complete-task', (event) => {
-    const taskId = event.target.dataset.id;
-    toggleTaskCompletion(taskId);
-});
+// Reusable component solution:
+// build things once and reuse them many times, customizing them as needed for each specific use case
+
+// Component class handles tasks like:
+// adding elements to the page, removing elements from the page, updating elements when data changes
+
+class Component {
+    constructor(props = {}) {
+      this.props = props; // values passed to a component when it's created, allowing the same component to display different data
+      this.state = {}; // enables the component to store and update its own data
+      this.element = null; // holds a reference to the actual DOM element, value is initially null until a reference to the DOM element is assigned
+    }
 ```
 </details>
 
-### DOM Helper
-The `domHelper` module dynamically updates the UI.
+### formComponent.js
+Simplifies form creation and handling by creating ready-to-use forms.
 
 <details>
 <summary>Example</summary>
 
 ```js
-// todo
+import createElement from './domHelper.js';
+import store from './store.js';
+
+function createForm() {
+  const input = createElement('input', {
+    attributes: { type: 'text', placeholder: 'Enter value' },
+    events: { input: (e) => store.update({ userInput: e.target.value }) }
+  });
+  
+  const button = createElement('button', {
+    attributes: { type: 'submit' },
+    events: { click: (e) => { /* click handler */ } }
+  }, 'Submit');
+
+  return createElement('form', { events: { submit: (e) => e.preventDefault() } }, input, button);
+}
 ```
 </details>
 
-### HTTP Communication
-The `http` module handles API requests.
+### eventDelegator.js
+Implements event delegation, allowing a single event listener on a parent element to handle events from multiple child elements, prevents default browser behavior and event bubbling.
 
 <details>
 <summary>Example</summary>
 
 ```js
-// todo
+export function delegateEvent(parent, selector, eventType, handler) {
+  parent.addEventListener(eventType, function(event) {
+    // Event delegation implementation
+  });
+}
+```
+</details>
+
+### router.js
+Handles URL-based navigation without page reloads, registers route handlers, and updates the browser history.
+
+<details>
+<summary>Example</summary>
+
+```js
+class Router {
+  constructor() {
+    this.routes = {};
+    window.addEventListener('popstate', () => { this.handleURLChange(location.pathname); });
+  }
+  // Methods for routing
+}
+```
+</details>
+
+### store.js
+Provides centralized state management with localStorage persistence, subscription system for updates, and methods to get/update state.
+
+<details>
+<summary>Example</summary>
+
+```js
+class Store {
+  constructor(initialState = {}) {
+    this.state = this.loadState() || initialState;
+    this.subscribers = [];
+  }
+  // Methods for state management
+}
+```
+</details>
+
+### domHelper.js
+Simplifies DOM creation and manipulation, enabling setting attributes, styles, and event listeners in one function call.
+
+<details>
+<summary>Example</summary>
+
+```js
+export default function createElement(tag, options = {}, ...children) {
+  const element = document.createElement(tag);
+  // Element configuration code
+  return element;
+}
+```
+</details>
+
+### styleManager.js
+Tool for manipulating element styles.
+
+<details>
+<summary>Example</summary>
+
+```js
+export function applyStyles(element, styles) {
+  Object.entries(styles).forEach(([property, value]) => {
+    element.style[property] = value;
+  });
+}
+
+export function toggleStyle(element, property, value, condition) {
+  element.style[property] = condition ? value : '';
+}
+```
+</details>
+
+### http.js
+Provides a straightforward and simplified API for HTTP requests
+
+<details>
+<summary>Example</summary>
+
+```js
+export function get(url, options = {}) { /* implementation */ }
+export function post(url, data, options = {}) { /* implementation */ }
+export function put(url, data, options = {}) { /* implementation */ }
+export function del(url, options = {}) { /* implementation */ }
 ```
 </details>
