@@ -111,27 +111,47 @@ class TaskItem extends Component {
   }
 
   render() {
-    // Destructure properties from props
-    const { task, onComplete, onDelete } = this.props;
+    // Destructure the task from props.
+    const { task } = this.props;
 
-    // Create elements with the DOM helper
-    const container = createElement('div', { attributes: { class: 'task-item' } });
-    const taskText = createElement('span', { class: 'task-text' }, task.text);
-    
-    // Conditional rendering based on task state
+    // Create the container element and store the task id as a data attribute.
+    const container = createElement('div', { 
+      attributes: { 
+        class: 'task-item',
+        'data-task-id': task.id 
+      } 
+    });
+
+    // Create an element for the task text.
+    const taskText = createElement('span', { attributes: { class: 'task-text' } }, task.text);
+
+    // Use toggleStyle to conditionally apply styles when the task is completed.
+    // If task.completed is true, then text will be struck through and colored gray.
+    toggleStyle(taskText, 'textDecoration', 'line-through', task.completed);
+    toggleStyle(taskText, 'color', '#aaa', task.completed);
+
+    container.appendChild(taskText);
+
+    // If the task is active, add a "Complete" button with a data-action attribute.
     if (!task.completed) {
       const completeButton = createElement('button', {
-        events: { click: () => onComplete(task.id) }
+        attributes: { 
+          class: 'complete',
+          'data-action': 'complete'
+        }
       }, 'Complete');
-      // ...
+      container.appendChild(completeButton);
     }
-    
-    // Event handling with component methods
+
+    // Add a "Delete" button (always present) with a data-action attribute.
     const deleteButton = createElement('button', {
-      events: { click: () => onDelete(task.id) }
+      attributes: { 
+        class: 'delete',
+        'data-action': 'delete'
+      }
     }, 'Delete');
-    
-    // Return the component's DOM representation
+    container.appendChild(deleteButton);
+
     return container;
   }
 }
@@ -319,14 +339,15 @@ class TaskItem extends Component {
 ```
 </details>
 
-#### It has a system for adding and manipulating styles and attributes. TODO // VAJA LISADA STYLES MANIPULATION
+#### It has a system for adding and manipulating styles and attributes.
 
 <details>
 <summary>Example from the project</summary>
   
 ```js
+// Manipulate attributes
 const addTaskDiv = createElement('div', { attributes: { class: 'add-task' } });
-// Dynamically apply a background color via the style manager.
+// Manipulate styles
 applyStyles(addTaskDiv, { backgroundColor: '#f9f9f9', padding: '10px' });
 ```
 </details>
