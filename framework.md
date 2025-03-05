@@ -31,7 +31,7 @@
 - **DOM Manipulation:** The framework's DOM helper simplifies element creation and event binding, reducing boilerplate code.
 - **Event Handling:** Tasks are manipulated (added, completed, deleted) by handling click events on corresponding buttons.
 
-The app is structured as follows:
+The framework is structured as follows:
 - `store.js` manages the task list state.
 - `router.js` enables tab navigation.
 - `eventDelegator.js` handles user interactions.
