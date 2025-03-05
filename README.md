@@ -325,7 +325,9 @@ class TaskItem extends Component {
 <summary>Example from the project</summary>
   
 ```js
-TODO
+const addTaskDiv = createElement('div', { attributes: { class: 'add-task' } });
+// Dynamically apply a background color via the style manager.
+applyStyles(addTaskDiv, { backgroundColor: '#f9f9f9', padding: '10px' });
 ```
 </details>
 
@@ -417,75 +419,63 @@ const completedButton = createElement('button', {
 ```
 </details>
 
-#### Event handling can be delegated to parent elements. TODO // delegateEvent frameworkis olemas, aga otseselt examples pole kasutatud. lisasin siia näite kuidas saaks koodis kasutada 
+#### Event handling can be delegated to parent elements.
 
 <details>
 <summary>Example from the project</summary>
   
 ```js
-// Example of how event delegation could be used in the Todo app
-
-// Create a parent container for tasks
-const taskListDiv = createElement('div', { attributes: { class: 'task-list' } });
-
-// Render task items without individual event handlers
-tasksToRender.forEach(task => {
-  const taskItem = createElement('div', {
-    attributes: { 
-      class: 'task-item',
-      'data-id': task.id
-    }
+  // Attach delegated event listeners.
+  delegateEvent(taskListDiv, 'button.complete', 'click', function(event) {
+    const taskId = parseInt(this.parentElement.getAttribute('data-task-id'));
+    completeTask(taskId);
   });
-  
-  const taskText = createElement('span', {}, task.text);
-  
-  const completeButton = createElement('button', {
-    attributes: { class: 'complete-button' }
-  }, 'Complete');
-  
-  const deleteButton = createElement('button', {
-    attributes: { class: 'delete-button' }
-  }, 'Delete');
-  
-  taskItem.appendChild(taskText);
-  if (!task.completed) taskItem.appendChild(completeButton);
-  taskItem.appendChild(deleteButton);
-  
-  taskListDiv.appendChild(taskItem);
-});
-
-// Use event delegation for all delete buttons
-delegateEvent(taskListDiv, '.delete-button', 'click', (event, target) => {
-  const taskId = target.closest('.task-item').dataset.id;
-  deleteTask(taskId);
-});
-
-// Use event delegation for all complete buttons
-delegateEvent(taskListDiv, '.complete-button', 'click', (event, target) => {
-  const taskId = target.closest('.task-item').dataset.id;
-  completeTask(taskId);
-});
-
-appContainer.appendChild(taskListDiv);
+  delegateEvent(taskListDiv, 'button.delete', 'click', function(event) {
+    const taskId = parseInt(this.parentElement.getAttribute('data-task-id'));
+    deleteTask(taskId);
+  });
 ```
 </details>
 
-#### It prevents default browser behavior and event bubbling. TODO // lisasin näite kuidas saaks teha
+#### It prevents default browser behavior and event bubbling.
+
+<details>
+<summary>Example from the framework</summary>
+  
+```js
+export function delegateEvent(parent, selector, eventType, handler) {
+  parent.addEventListener(eventType, function(event) {
+    let target = event.target;
+    while (target && target !== parent) {
+      if (target.matches(selector)) {
+        event.preventDefault(); // preventDefault
+        event.stopPropagation(); // stopPropagation
+        event.delegateTarget = target;
+        handler.call(target, event);
+        break;
+      }
+      target = target.parentElement;
+    }
+  });
+}
+```
+</details>
 
 <details>
 <summary>Example from the project</summary>
   
 ```js
-// Example from TaskItem.js (modified to show prevention)
-const completeButton = createElement('button', {
-  events: { 
-    click: (event) => {
-      event.preventDefault(); // Prevent any default button behavior
-      event.stopPropagation(); // Stop event from bubbling up
-      onComplete(task.id);
-    } 
-  }
-}, 'Complete');
+  // When a click occurs on a button, delegateEvent function intercepts that event:
+  // * It calls event.preventDefault() to stop any default behavior
+  // * It calls event.stopPropagation() to prevent the event from bubbling up
+  delegateEvent(taskListDiv, 'button.complete', 'click', function(event) {
+    const taskId = parseInt(this.parentElement.getAttribute('data-task-id'));
+    completeTask(taskId);
+  });
+  delegateEvent(taskListDiv, 'button.delete', 'click', function(event) {
+    const taskId = parseInt(this.parentElement.getAttribute('data-task-id'));
+    deleteTask(taskId);
+  });
 ```
 </details>
 
