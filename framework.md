@@ -1,35 +1,27 @@
 ## WORK IN PROGRESS
 
-## Features
-
-- **Active and Completed Tabs:**
-  - **Active Tab:** Displays only tasks that are not yet marked as completed.
-  - **Completed Tab:** Displays tasks that have been completed.
-- **Task Management:**
-  - **Add Task:** Enter a new task via an input field.
-  - **Complete Task:** Click the **Complete** button on an active task to mark it as completed (this moves the task to the Completed tab).
-  - **Delete Task:** Remove a task completely from the application.
-- **State Management:** Uses the framework's global store to maintain tasks and the current filter.
-- **DOM Helper:** Leverages the framework’s DOM helper to create and manipulate elements with minimal boilerplate.
-
 ## Directory Structure
 
 ```
 /my-project-root
 ├── example/
-│   ├── index.html          # Main HTML file that loads the app
+│   ├── index.html
 │   ├── src/
-│   │   └── index.js        # Main JavaScript file for the example project
-│   └── server.js           # Express server to serve the example project (optional)
-└── framework/              # Custom framework code (used by the example)
+│   │   └── index.js
+│   │   └── TaskItem.js
+│   │   └── TaskList.js
+│   └── server.js           
+└── framework/
     ├── core/
-    │   ├── store.js        # Application state management
-    │   └── router.js       # URL routing (not used in this example)
+    │   ├── store.js
+    │   └── router.js
     ├── dom/
-    │   └── domHelper.js    # DOM element creation and manipulation helper
+    │   └── domHelper.js
     ├── http/
-    │   └── http.js         # HTTP utilities (not used in this example)
-    └── components/         # Reusable components (if needed)
+    │   └── http.js
+    └── components/
+        └── Components.js
+        └── formComponent.js
 ```
 
 
@@ -45,6 +37,8 @@ The app is structured as follows:
 - `eventDelegator.js` handles user interactions.
 - `domHelper.js` dynamically updates the UI.
 - `http.js` handles API requests.
+- `Component.js` handles API requests.
+- `formComponent.js` handles API requests.
 
 ## Table of Contents
 - [Overview](#overview)
